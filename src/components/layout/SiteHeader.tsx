@@ -1,0 +1,79 @@
+import { Link, NavLink, useLocation } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Menu, Hammer } from "lucide-react";
+import { useState } from "react";
+import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
+
+const nav = [
+  { to: "/calculator", label: "Budget Calculator" },
+  { to: "/materials", label: "Materials" },
+  { to: "/map-planning", label: "Map Planning" },
+  { to: "/marketplace", label: "Find Labour" },
+];
+
+const SiteHeader = () => {
+  const [open, setOpen] = useState(false);
+  const location = useLocation();
+  return (
+    <header className="sticky top-0 z-40 bg-background/80 backdrop-blur">
+      <nav className="container mx-auto flex items-center justify-between h-16">
+        <Link to="/" className="inline-flex items-center gap-2 font-semibold">
+          <span className="inline-flex h-8 w-8 items-center justify-center rounded-md bg-gradient-brand text-brand-foreground shadow-glow">
+            <Hammer className="h-5 w-5" />
+          </span>
+          BuildMate
+        </Link>
+        <div className="hidden md:flex items-center gap-6">
+          {nav.map((n) => (
+            <NavLink
+              key={n.to}
+              to={n.to}
+              className={({ isActive }) =>
+                "text-sm transition-colors hover:text-primary " +
+                (isActive ? "text-primary" : "text-muted-foreground")
+              }
+            >
+              {n.label}
+            </NavLink>
+          ))}
+          <Button asChild variant="hero" size="sm">
+            <Link to="/calculator">Get Started</Link>
+          </Button>
+        </div>
+        <div className="md:hidden">
+          <Sheet open={open} onOpenChange={setOpen}>
+            <SheetTrigger asChild>
+              <Button variant="outline" size="icon" aria-label="Open Menu">
+                <Menu />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="flex flex-col">
+              <div className="mt-8 flex flex-col gap-4">
+                {nav.map((n) => (
+                  <Link
+                    key={n.to}
+                    to={n.to}
+                    onClick={() => setOpen(false)}
+                    className={
+                      "text-base " +
+                      (location.pathname === n.to
+                        ? "text-primary"
+                        : "text-foreground")
+                    }
+                  >
+                    {n.label}
+                  </Link>
+                ))}
+                <Button asChild variant="hero" onClick={() => setOpen(false)}>
+                  <Link to="/calculator">Get Started</Link>
+                </Button>
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
+      </nav>
+    </header>
+  );
+};
+
+export default SiteHeader;
