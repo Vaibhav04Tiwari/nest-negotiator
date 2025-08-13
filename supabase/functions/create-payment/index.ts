@@ -45,9 +45,9 @@ serve(async (req) => {
       line_items: [
         {
           price_data: {
-            currency: "usd",
+            currency: "inr",
             product_data: { name: `House Plan - ${planData.floors} Floor(s)` },
-            unit_amount: 9999, // $99.99 for house plans
+            unit_amount: 830000, // ₹8,300 in paise
           },
           quantity: 1,
         },

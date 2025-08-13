@@ -123,7 +123,7 @@ const MapPlanning = () => {
             disabled={isLoading}
             className="w-full"
           >
-            {isLoading ? "Processing..." : "Pay $99.99 & Start Designing"}
+            {isLoading ? "Processing..." : "Pay ₹8,300 & Start Designing"}
           </Button>
         </CardContent>
       </Card>
