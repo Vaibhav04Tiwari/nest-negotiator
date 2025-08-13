@@ -9,6 +9,7 @@ import AppLayout from "./layouts/AppLayout";
 import Calculator from "./pages/Calculator";
 import Materials from "./pages/Materials";
 import MapPlanning from "./pages/MapPlanning";
+import MapEditor from "./pages/MapEditor";
 import Marketplace from "./pages/Marketplace";
 import { HelmetProvider } from "react-helmet-async";
 
@@ -27,6 +28,7 @@ const App = () => (
               <Route path="/calculator" element={<Calculator />} />
               <Route path="/materials" element={<Materials />} />
               <Route path="/map-planning" element={<MapPlanning />} />
+              <Route path="/map-editor" element={<MapEditor />} />
               <Route path="/marketplace" element={<Marketplace />} />
             </Route>
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

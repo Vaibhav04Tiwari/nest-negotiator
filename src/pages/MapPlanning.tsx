@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -5,8 +6,54 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const MapPlanning = () => {
+  const [length, setLength] = useState("");
+  const [width, setWidth] = useState("");
+  const [floors, setFloors] = useState("1");
+  const [style, setStyle] = useState("modern");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handlePayment = async () => {
+    if (!length || !width) {
+      toast({
+        title: "Missing Information",
+        description: "Please fill in the plot dimensions.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('create-payment', {
+        body: {
+          planData: {
+            length: parseInt(length),
+            width: parseInt(width),
+            floors,
+            style,
+          }
+        }
+      });
+
+      if (error) throw error;
+
+      // Open Stripe checkout in a new tab
+      window.open(data.url, '_blank');
+    } catch (error) {
+      console.error('Payment error:', error);
+      toast({
+        title: "Payment Error",
+        description: "Failed to initiate payment. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div className="container mx-auto py-10">
       <Helmet>
@@ -23,17 +70,29 @@ const MapPlanning = () => {
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label htmlFor="length">Plot length (ft)</Label>
-              <Input id="length" type="number" placeholder="e.g., 40" />
+              <Input 
+                id="length" 
+                type="number" 
+                placeholder="e.g., 40" 
+                value={length}
+                onChange={(e) => setLength(e.target.value)}
+              />
             </div>
             <div>
               <Label htmlFor="width">Plot width (ft)</Label>
-              <Input id="width" type="number" placeholder="e.g., 30" />
+              <Input 
+                id="width" 
+                type="number" 
+                placeholder="e.g., 30" 
+                value={width}
+                onChange={(e) => setWidth(e.target.value)}
+              />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label>Floors</Label>
-              <Select defaultValue="1">
+              <Select value={floors} onValueChange={setFloors}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select floors" />
                 </SelectTrigger>
@@ -46,7 +105,7 @@ const MapPlanning = () => {
             </div>
             <div>
               <Label>Style</Label>
-              <Select defaultValue="modern">
+              <Select value={style} onValueChange={setStyle}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select style" />
                 </SelectTrigger>
@@ -60,15 +119,11 @@ const MapPlanning = () => {
           </div>
           <Button
             variant="hero"
-            onClick={() =>
-              toast({
-                title: "Payment required",
-                description:
-                  "To accept payments and deliver plans, connect Supabase + your payment provider. This is a demo UI.",
-              })
-            }
+            onClick={handlePayment}
+            disabled={isLoading}
+            className="w-full"
           >
-            Proceed to Pay & Submit
+            {isLoading ? "Processing..." : "Pay $99.99 & Start Designing"}
           </Button>
         </CardContent>
       </Card>
