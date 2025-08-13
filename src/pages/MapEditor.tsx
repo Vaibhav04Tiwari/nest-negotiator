@@ -8,10 +8,10 @@ import { toast } from "@/hooks/use-toast";
 const MapEditor = () => {
   const [searchParams] = useSearchParams();
   const [planData, setPlanData] = useState(null);
-  const sessionId = searchParams.get("session_id");
+  const orderId = searchParams.get("order_id");
 
   useEffect(() => {
-    if (sessionId) {
+    if (orderId) {
       // In a real app, you'd verify the payment and get plan data
       // For now, we'll simulate getting the plan data
       setPlanData({
@@ -26,9 +26,9 @@ const MapEditor = () => {
         description: "Welcome to your house plan editor. Start designing your dream home!",
       });
     }
-  }, [sessionId]);
+  }, [orderId]);
 
-  if (!sessionId) {
+  if (!orderId) {
     return (
       <div className="container mx-auto py-10">
         <Card>

@@ -8,12 +8,28 @@ import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
+declare global {
+  interface Window {
+    Razorpay: any;
+  }
+}
+
 const MapPlanning = () => {
   const [length, setLength] = useState("");
   const [width, setWidth] = useState("");
   const [floors, setFloors] = useState("1");
   const [style, setStyle] = useState("modern");
   const [isLoading, setIsLoading] = useState(false);
+
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
 
   const handlePayment = async () => {
     if (!length || !width) {
@@ -27,6 +43,13 @@ const MapPlanning = () => {
 
     setIsLoading(true);
     try {
+      // Load Razorpay script
+      const scriptLoaded = await loadRazorpayScript();
+      if (!scriptLoaded) {
+        throw new Error("Failed to load Razorpay script");
+      }
+
+      // Create order
       const { data, error } = await supabase.functions.invoke('create-payment', {
         body: {
           planData: {
@@ -40,8 +63,54 @@ const MapPlanning = () => {
 
       if (error) throw error;
 
-      // Open Stripe checkout in a new tab
-      window.open(data.url, '_blank');
+      // Configure Razorpay options
+      const options = {
+        key: data.key_id,
+        amount: data.amount,
+        currency: data.currency,
+        name: "BuildMate",
+        description: "House Plan Design",
+        order_id: data.order_id,
+        handler: async function (response: any) {
+          try {
+            // Verify payment
+            const { error: verifyError } = await supabase.functions.invoke('verify-payment', {
+              body: {
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+              }
+            });
+
+            if (verifyError) throw verifyError;
+
+            toast({
+              title: "Payment Successful!",
+              description: "Redirecting to map editor...",
+            });
+
+            // Redirect to map editor
+            window.location.href = `/map-editor?order_id=${response.razorpay_order_id}`;
+          } catch (error) {
+            console.error('Payment verification error:', error);
+            toast({
+              title: "Payment Verification Failed",
+              description: "Please contact support.",
+              variant: "destructive",
+            });
+          }
+        },
+        prefill: {
+          name: "Customer",
+          email: "customer@example.com",
+        },
+        theme: {
+          color: "#3b82f6"
+        }
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
     } catch (error) {
       console.error('Payment error:', error);
       toast({
