@@ -7,14 +7,103 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "13.0.4"
   }
   public: {
     Tables: {
-      [_ in never]: never
+      labour_profiles: {
+        Row: {
+          avatar_url: string | null
+          bio: string | null
+          city: string
+          created_at: string
+          experience_years: number
+          full_name: string
+          id: string
+          is_available: boolean | null
+          is_verified: boolean | null
+          phone: string
+          rate_per_day: number
+          rating: number | null
+          skills: string[] | null
+          total_reviews: number | null
+          trade: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          bio?: string | null
+          city: string
+          created_at?: string
+          experience_years?: number
+          full_name: string
+          id?: string
+          is_available?: boolean | null
+          is_verified?: boolean | null
+          phone: string
+          rate_per_day: number
+          rating?: number | null
+          skills?: string[] | null
+          total_reviews?: number | null
+          trade: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          bio?: string | null
+          city?: string
+          created_at?: string
+          experience_years?: number
+          full_name?: string
+          id?: string
+          is_available?: boolean | null
+          is_verified?: boolean | null
+          phone?: string
+          rate_per_day?: number
+          rating?: number | null
+          skills?: string[] | null
+          total_reviews?: number | null
+          trade?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          city: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          phone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          city?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          city?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
