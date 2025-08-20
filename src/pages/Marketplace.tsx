@@ -1,111 +1,246 @@
+import { useState, useMemo, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
-import { useMemo, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Users2 } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { 
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { MessageSquare, Star, MapPin, Phone, Calendar, Send, Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
-type Labour = { id: string; name: string; trade: string; rate: string; rating: number; city: string };
+interface Labour {
+  id: string;
+  full_name: string;
+  trade: string;
+  city: string;
+  rating: number;
+  total_reviews: number;
+  rate_per_day: number;
+  avatar_url: string | null;
+  phone: string;
+  experience_years: number;
+  bio: string | null;
+  skills: string[] | null;
+  is_verified: boolean;
+}
 
-const LABOUR: Labour[] = [
-  { id: "1", name: "Ravi Sharma", trade: "Mason", rate: "₹ 700/day", rating: 4.6, city: "Delhi" },
-  { id: "2", name: "Amit Kumar", trade: "Carpenter", rate: "₹ 900/day", rating: 4.4, city: "Lucknow" },
-  { id: "3", name: "Sita Verma", trade: "Painter", rate: "₹ 650/day", rating: 4.8, city: "Jaipur" },
-  { id: "4", name: "Imran Ali", trade: "Electrician", rate: "₹ 850/day", rating: 4.5, city: "Mumbai" },
-];
-
-const trades = ["All", "Mason", "Carpenter", "Painter", "Electrician"] as const;
+const trades = ["All", "Mason", "Carpenter", "Electrician", "Plumber", "Painter", "Welder", "Tiler", "Roofer", "Landscaper", "General Labour"];
 
 const Marketplace = () => {
-  const [trade, setTrade] = useState<(typeof trades)[number]>("All");
-  const [query, setQuery] = useState("");
+  const [selectedTrade, setSelectedTrade] = useState("All");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [labour, setLabour] = useState<Labour[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const filtered = useMemo(
-    () =>
-      LABOUR.filter(
-        (l) => (trade === "All" || l.trade === trade) &&
-          (l.name.toLowerCase().includes(query.toLowerCase()) || l.city.toLowerCase().includes(query.toLowerCase()))
-      ),
-    [trade, query]
-  );
+  useEffect(() => {
+    fetchLabour();
+  }, []);
+
+  const fetchLabour = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('labour_profiles')
+        .select('*')
+        .eq('is_available', true)
+        .order('rating', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching labour:', error);
+      } else {
+        setLabour(data || []);
+      }
+    } catch (error) {
+      console.error('Error fetching labour:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filteredLabour = useMemo(() => {
+    return labour.filter(labourItem => {
+      const matchesTrade = selectedTrade === "All" || labourItem.trade === selectedTrade;
+      const matchesSearch = searchQuery === "" || 
+        labourItem.full_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        labourItem.city.toLowerCase().includes(searchQuery.toLowerCase());
+      return matchesTrade && matchesSearch;
+    });
+  }, [labour, selectedTrade, searchQuery]);
 
   return (
     <div className="container mx-auto py-10">
       <Helmet>
         <title>Find Construction Labour Near You | BuildMate</title>
-        <meta name="description" content="Browse skilled labour and connect with them via in-site chat to discuss scope and bargain prices (demo)." />
+        <meta name="description" content="Browse skilled labour professionals and connect with them to discuss your construction project needs." />
         <link rel="canonical" href={window.location.origin + "/marketplace"} />
       </Helmet>
 
-      <div className="mb-6 flex flex-col md:flex-row items-stretch gap-4">
-        <div className="flex-1 grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold mb-2">Find Skilled Labour</h1>
+        <p className="text-muted-foreground">Connect with verified construction professionals in your area</p>
+      </div>
+
+      <div className="mb-6 space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <Label>Search by name/city</Label>
-            <Input placeholder="e.g., Ravi or Delhi" value={query} onChange={(e) => setQuery(e.target.value)} />
+            <Input
+              placeholder="Search by name or city..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full"
+            />
           </div>
-          <div>
-            <Label>Trade</Label>
-            <div className="flex gap-2 flex-wrap">
-              {trades.map((t) => (
-                <Button key={t} variant={t === trade ? "hero" : "outline"} size="sm" onClick={() => setTrade(t)}>
-                  {t}
-                </Button>
-              ))}
-            </div>
-          </div>
+        </div>
+        
+        <div className="flex flex-wrap gap-2">
+          {trades.map((trade) => (
+            <Button
+              key={trade}
+              variant={selectedTrade === trade ? "default" : "outline"}
+              size="sm"
+              onClick={() => setSelectedTrade(trade)}
+            >
+              {trade}
+            </Button>
+          ))}
         </div>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-        {filtered.map((l) => (
-          <Card key={l.id}>
-            <CardHeader>
-              <div className="flex items-center gap-3">
-                <Avatar>
-                  <AvatarFallback>{l.name.split(" ").map((n)=>n[0]).slice(0,2).join("")}</AvatarFallback>
-                </Avatar>
-                <div>
-                  <CardTitle className="text-base">{l.name}</CardTitle>
-                  <p className="text-sm text-muted-foreground">{l.trade} • {l.city}</p>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="flex items-center justify-between">
-              <p className="text-sm text-muted-foreground">{l.rate} • ⭐ {l.rating}</p>
-              <Drawer>
-                <DrawerTrigger asChild>
-                  <Button variant="hero">Chat (Demo)</Button>
-                </DrawerTrigger>
-                <DrawerContent>
-                  <DrawerHeader>
-                    <DrawerTitle>Chat with {l.name}</DrawerTitle>
-                  </DrawerHeader>
-                  <div className="px-4 pb-6">
-                    <div className="mb-3 text-sm text-muted-foreground">
-                      Realtime chat and bargaining requires Supabase setup. This is a demo.
-                    </div>
-                    <div className="h-48 rounded-md border p-3 text-sm overflow-y-auto space-y-2">
-                      <div className="rounded-md bg-secondary p-2 w-fit max-w-[80%]">Hello! Are you available this week?</div>
-                      <div className="rounded-md bg-brand-muted p-2 w-fit max-w-[80%] ml-auto">Yes, I am. What is the site location and scope?</div>
-                    </div>
-                    <div className="mt-3 grid grid-cols-[1fr_auto] gap-2">
-                      <Input disabled placeholder="Type a message (connect backend to enable)" />
-                      <Button disabled>Send</Button>
+      <div className="min-h-[400px]">
+        {loading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 className="h-8 w-8 animate-spin" />
+            <span className="ml-2">Loading labour professionals...</span>
+          </div>
+        ) : filteredLabour.length === 0 ? (
+          <div className="text-center py-12">
+            <h3 className="text-lg font-semibold mb-2">No labour found</h3>
+            <p className="text-muted-foreground mb-4">Try adjusting your search or filters</p>
+            <Button asChild>
+              <a href="/labour-registration">Register as Labour Professional</a>
+            </Button>
+          </div>
+        ) : (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {filteredLabour.map((labourItem) => (
+              <Card key={labourItem.id} className="hover:shadow-lg transition-shadow">
+                <CardContent className="pt-6">
+                  <div className="flex items-center gap-4 mb-4">
+                    <Avatar className="h-12 w-12">
+                      <AvatarImage src={labourItem.avatar_url || "/placeholder.svg"} alt={labourItem.full_name} />
+                      <AvatarFallback>{labourItem.full_name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                    </Avatar>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-semibold">{labourItem.full_name}</h3>
+                        {labourItem.is_verified && (
+                          <Badge variant="default" className="text-xs">Verified</Badge>
+                        )}
+                      </div>
+                      <Badge variant="secondary">{labourItem.trade}</Badge>
                     </div>
                   </div>
-                </DrawerContent>
-              </Drawer>
-            </CardContent>
-          </Card>
-        ))}
+                  
+                  <div className="space-y-2 text-sm text-muted-foreground mb-4">
+                    <div className="flex items-center gap-2">
+                      <MapPin className="h-4 w-4" />
+                      {labourItem.city}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                      {labourItem.rating} ({labourItem.total_reviews} reviews)
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Calendar className="h-4 w-4" />
+                      ₹{labourItem.rate_per_day.toLocaleString()}/day • {labourItem.experience_years}yr exp
+                    </div>
+                  </div>
+
+                  {labourItem.skills && labourItem.skills.length > 0 && (
+                    <div className="mb-4">
+                      <div className="flex flex-wrap gap-1">
+                        {labourItem.skills.slice(0, 3).map((skill) => (
+                          <Badge key={skill} variant="outline" className="text-xs">
+                            {skill}
+                          </Badge>
+                        ))}
+                        {labourItem.skills.length > 3 && (
+                          <Badge variant="outline" className="text-xs">
+                            +{labourItem.skills.length - 3} more
+                          </Badge>
+                        )}
+                      </div>
+                    </div>
+                  )}
+
+                  <Drawer>
+                    <DrawerTrigger asChild>
+                      <Button variant="outline" className="w-full">
+                        <MessageSquare className="mr-2 h-4 w-4" />
+                        Contact & Chat
+                      </Button>
+                    </DrawerTrigger>
+                    <DrawerContent>
+                      <div className="mx-auto w-full max-w-sm">
+                        <DrawerHeader>
+                          <DrawerTitle>Chat with {labourItem.full_name}</DrawerTitle>
+                          <DrawerDescription>
+                            Start a conversation to discuss your project needs
+                          </DrawerDescription>
+                        </DrawerHeader>
+                        <div className="p-4 pb-0">
+                          {labourItem.bio && (
+                            <div className="mb-4 p-3 bg-muted rounded-lg">
+                              <h4 className="font-medium text-sm mb-1">About</h4>
+                              <p className="text-sm text-muted-foreground">{labourItem.bio}</p>
+                            </div>
+                          )}
+                          <div className="flex items-center space-x-2">
+                            <Input
+                              placeholder="Type your message..."
+                              className="flex-1"
+                              disabled
+                            />
+                            <Button size="sm" disabled>
+                              <Send className="h-4 w-4" />
+                            </Button>
+                          </div>
+                          <p className="text-xs text-muted-foreground mt-2 text-center">
+                            Chat feature coming soon!
+                          </p>
+                        </div>
+                        <DrawerFooter>
+                          <div className="flex items-center justify-center gap-4 text-sm">
+                            <div className="flex items-center gap-1">
+                              <Phone className="h-4 w-4" />
+                              {labourItem.phone}
+                            </div>
+                          </div>
+                        </DrawerFooter>
+                      </div>
+                    </DrawerContent>
+                  </Drawer>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
       </div>
 
-      <div className="mt-10 flex items-center gap-2 text-sm text-muted-foreground">
-        <Users2 className="h-4 w-4" />
-        Tip: After connecting Supabase, we can enable authentication, chat, and bookings.
+      <div className="mt-12 text-center">
+        <h3 className="text-xl font-semibold mb-2">Are you a skilled labour professional?</h3>
+        <p className="text-muted-foreground mb-4">Join our platform and connect with customers looking for your services</p>
+        <Button asChild>
+          <a href="/labour-registration">Register as Labour Professional</a>
+        </Button>
       </div>
     </div>
   );

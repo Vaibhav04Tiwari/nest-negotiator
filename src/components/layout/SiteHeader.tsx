@@ -1,8 +1,10 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Menu, Hammer } from "lucide-react";
+import { Menu, Hammer, User, LogOut } from "lucide-react";
 import { useState } from "react";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/contexts/AuthContext";
 
 const nav = [
   { to: "/calculator", label: "Budget Calculator" },
@@ -14,6 +16,7 @@ const nav = [
 const SiteHeader = () => {
   const [open, setOpen] = useState(false);
   const location = useLocation();
+  const { user, signOut } = useAuth();
   return (
     <header className="sticky top-0 z-40 bg-background/80 backdrop-blur">
       <nav className="container mx-auto flex items-center justify-between h-16">
@@ -36,9 +39,29 @@ const SiteHeader = () => {
               {n.label}
             </NavLink>
           ))}
-          <Button asChild variant="hero" size="sm">
-            <Link to="/calculator">Get Started</Link>
-          </Button>
+          {user ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <User className="h-4 w-4 mr-2" />
+                  Account
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem asChild>
+                  <Link to="/labour-registration">Register as Labour</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={signOut}>
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <Button asChild variant="hero" size="sm">
+              <Link to="/auth">Get Started</Link>
+            </Button>
+          )}
         </div>
         <div className="md:hidden">
           <Sheet open={open} onOpenChange={setOpen}>
@@ -64,9 +87,28 @@ const SiteHeader = () => {
                     {n.label}
                   </Link>
                 ))}
-                <Button asChild variant="hero" onClick={() => setOpen(false)}>
-                  <Link to="/calculator">Get Started</Link>
-                </Button>
+                {user ? (
+                  <>
+                    <Link
+                      to="/labour-registration"
+                      onClick={() => setOpen(false)}
+                      className="text-base text-foreground"
+                    >
+                      Register as Labour
+                    </Link>
+                    <Button variant="outline" onClick={() => {
+                      signOut();
+                      setOpen(false);
+                    }}>
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Sign Out
+                    </Button>
+                  </>
+                ) : (
+                  <Button asChild variant="hero" onClick={() => setOpen(false)}>
+                    <Link to="/auth">Get Started</Link>
+                  </Button>
+                )}
               </div>
             </SheetContent>
           </Sheet>

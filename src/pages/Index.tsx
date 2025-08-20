@@ -38,7 +38,7 @@ const Index = () => {
             <p className="mt-4 text-lg text-muted-foreground">
               Get instant budget estimates, live material costing, professional map planning, and connect with skilled labour nearby.
             </p>
-            <div className="mt-8 flex items-center justify-center gap-4">
+            <div className="mt-8 flex items-center justify-center gap-4 flex-wrap">
               <Button asChild variant="hero" className="group">
                 <Link to="/calculator">
                   <Calculator className="mr-2 transition-transform group-hover:scale-110" /> Calculate Budget
@@ -47,6 +47,11 @@ const Index = () => {
               <Button asChild variant="outline">
                 <Link to="/marketplace">
                   <Users2 className="mr-2" /> Find Labour
+                </Link>
+              </Button>
+              <Button asChild variant="secondary">
+                <Link to="/auth">
+                  Get Started
                 </Link>
               </Button>
             </div>
@@ -77,6 +82,27 @@ const Index = () => {
               <p className="mt-1 text-sm text-muted-foreground">Chat with labour directly to discuss scope and negotiate fair rates.</p>
             </CardContent>
           </Card>
+        </div>
+      </section>
+
+      <section className="bg-brand-muted py-12 md:py-16">
+        <div className="container mx-auto text-center">
+          <h2 className="text-3xl font-bold mb-4">Join BuildMate Today</h2>
+          <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
+            Whether you're planning construction or offering skilled labour services, BuildMate connects you with the right opportunities.
+          </p>
+          <div className="flex items-center justify-center gap-4 flex-wrap">
+            <Button asChild size="lg">
+              <Link to="/auth">
+                Sign Up as Customer
+              </Link>
+            </Button>
+            <Button asChild variant="outline" size="lg">
+              <Link to="/labour-registration">
+                Register as Labour
+              </Link>
+            </Button>
+          </div>
         </div>
       </section>
     </div>
