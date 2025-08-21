@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/contexts/AuthContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Home } from 'lucide-react';
@@ -25,6 +26,7 @@ const Auth = () => {
   });
 
   const { signUp, signIn, user } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -97,37 +99,37 @@ const Auth = () => {
 
           <Tabs defaultValue="signin" className="w-full">
             <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="signin">Sign In</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
+              <TabsTrigger value="signin">{t("auth.signIn")}</TabsTrigger>
+              <TabsTrigger value="signup">{t("auth.signUp")}</TabsTrigger>
             </TabsList>
 
             <TabsContent value="signin">
               <Card>
                 <CardHeader>
-                  <CardTitle>Welcome back</CardTitle>
+                  <CardTitle>{t("auth.welcome")}</CardTitle>
                   <CardDescription>
-                    Sign in to your account to continue
+                    {t("auth.alreadyAccount")}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <form onSubmit={handleSignIn} className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="signin-email">Email</Label>
+                      <Label htmlFor="signin-email">{t("auth.email")}</Label>
                       <Input
                         id="signin-email"
                         type="email"
-                        placeholder="Enter your email"
+                        placeholder={t("auth.email")}
                         value={signInData.email}
                         onChange={(e) => setSignInData(prev => ({ ...prev, email: e.target.value }))}
                         required
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="signin-password">Password</Label>
+                      <Label htmlFor="signin-password">{t("auth.password")}</Label>
                       <Input
                         id="signin-password"
                         type="password"
-                        placeholder="Enter your password"
+                        placeholder={t("auth.password")}
                         value={signInData.password}
                         onChange={(e) => setSignInData(prev => ({ ...prev, password: e.target.value }))}
                         required
@@ -135,7 +137,7 @@ const Auth = () => {
                     </div>
                     <Button type="submit" className="w-full" disabled={isLoading}>
                       {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                      Sign In
+                      {t("auth.signIn")}
                     </Button>
                   </form>
                 </CardContent>
@@ -145,52 +147,52 @@ const Auth = () => {
             <TabsContent value="signup">
               <Card>
                 <CardHeader>
-                  <CardTitle>Create account</CardTitle>
+                  <CardTitle>{t("auth.welcome")}</CardTitle>
                   <CardDescription>
-                    Join BuildMate to access all features
+                    {t("auth.needAccount")}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <form onSubmit={handleSignUp} className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="signup-name">Full Name</Label>
+                      <Label htmlFor="signup-name">{t("auth.fullName")}</Label>
                       <Input
                         id="signup-name"
                         type="text"
-                        placeholder="Enter your full name"
+                        placeholder={t("auth.fullName")}
                         value={signUpData.fullName}
                         onChange={(e) => setSignUpData(prev => ({ ...prev, fullName: e.target.value }))}
                         required
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="signup-email">Email</Label>
+                      <Label htmlFor="signup-email">{t("auth.email")}</Label>
                       <Input
                         id="signup-email"
                         type="email"
-                        placeholder="Enter your email"
+                        placeholder={t("auth.email")}
                         value={signUpData.email}
                         onChange={(e) => setSignUpData(prev => ({ ...prev, email: e.target.value }))}
                         required
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="signup-password">Password</Label>
+                      <Label htmlFor="signup-password">{t("auth.password")}</Label>
                       <Input
                         id="signup-password"
                         type="password"
-                        placeholder="Create a password"
+                        placeholder={t("auth.password")}
                         value={signUpData.password}
                         onChange={(e) => setSignUpData(prev => ({ ...prev, password: e.target.value }))}
                         required
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="confirm-password">Confirm Password</Label>
+                      <Label htmlFor="confirm-password">{t("auth.password")}</Label>
                       <Input
                         id="confirm-password"
                         type="password"
-                        placeholder="Confirm your password"
+                        placeholder={t("auth.password")}
                         value={signUpData.confirmPassword}
                         onChange={(e) => setSignUpData(prev => ({ ...prev, confirmPassword: e.target.value }))}
                         required
@@ -198,7 +200,7 @@ const Auth = () => {
                     </div>
                     <Button type="submit" className="w-full" disabled={isLoading}>
                       {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                      Sign Up
+                      {t("auth.signUp")}
                     </Button>
                   </form>
                 </CardContent>

@@ -5,18 +5,21 @@ import { useState } from "react";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/contexts/AuthContext";
-
-const nav = [
-  { to: "/calculator", label: "Budget Calculator" },
-  { to: "/materials", label: "Materials" },
-  { to: "/map-planning", label: "Map Planning" },
-  { to: "/marketplace", label: "Find Labour" },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
+import { LanguageSelector } from "@/components/LanguageSelector";
 
 const SiteHeader = () => {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const { user, signOut } = useAuth();
+  const { t } = useLanguage();
+  
+  const nav = [
+    { to: "/calculator", label: t("header.budgetCalculator") },
+    { to: "/materials", label: t("header.materials") },
+    { to: "/map-planning", label: t("header.mapPlanning") },
+    { to: "/marketplace", label: t("header.findLabour") },
+  ];
   return (
     <header className="sticky top-0 z-40 bg-background/80 backdrop-blur">
       <nav className="container mx-auto flex items-center justify-between h-16">
@@ -39,27 +42,28 @@ const SiteHeader = () => {
               {n.label}
             </NavLink>
           ))}
+          <LanguageSelector />
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" size="sm">
                   <User className="h-4 w-4 mr-2" />
-                  Account
+                  {t("header.account")}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem asChild>
-                  <Link to="/labour-registration">Register as Labour</Link>
+                  <Link to="/labour-registration">{t("header.registerAsLabour")}</Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={signOut}>
                   <LogOut className="h-4 w-4 mr-2" />
-                  Sign Out
+                  {t("header.signOut")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
             <Button asChild variant="hero" size="sm">
-              <Link to="/auth">Get Started</Link>
+              <Link to="/auth">{t("header.getStarted")}</Link>
             </Button>
           )}
         </div>
@@ -87,6 +91,9 @@ const SiteHeader = () => {
                     {n.label}
                   </Link>
                 ))}
+                <div className="mt-4">
+                  <LanguageSelector />
+                </div>
                 {user ? (
                   <>
                     <Link
@@ -94,19 +101,19 @@ const SiteHeader = () => {
                       onClick={() => setOpen(false)}
                       className="text-base text-foreground"
                     >
-                      Register as Labour
+                      {t("header.registerAsLabour")}
                     </Link>
                     <Button variant="outline" onClick={() => {
                       signOut();
                       setOpen(false);
                     }}>
                       <LogOut className="h-4 w-4 mr-2" />
-                      Sign Out
+                      {t("header.signOut")}
                     </Button>
                   </>
                 ) : (
                   <Button asChild variant="hero" onClick={() => setOpen(false)}>
-                    <Link to="/auth">Get Started</Link>
+                    <Link to="/auth">{t("header.getStarted")}</Link>
                   </Button>
                 )}
               </div>

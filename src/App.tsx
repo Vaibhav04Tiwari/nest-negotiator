@@ -15,14 +15,16 @@ import Auth from "./pages/Auth";
 import LabourRegistration from "./pages/LabourRegistration";
 import { HelmetProvider } from "react-helmet-async";
 import { AuthProvider } from "./contexts/AuthContext";
+import { LanguageProvider } from "./contexts/LanguageContext";
 
 const queryClient = new QueryClient();
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <HelmetProvider>
-      <AuthProvider>
-        <TooltipProvider>
+      <LanguageProvider>
+        <AuthProvider>
+          <TooltipProvider>
           <Toaster />
           <Sonner />
           <BrowserRouter>
@@ -41,8 +43,9 @@ const App = () => (
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
-        </TooltipProvider>
-      </AuthProvider>
+          </TooltipProvider>
+        </AuthProvider>
+      </LanguageProvider>
     </HelmetProvider>
   </QueryClientProvider>
 );
