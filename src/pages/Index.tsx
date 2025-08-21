@@ -49,11 +49,6 @@ const Index = () => {
                   <Users2 className="mr-2" /> Find Labour
                 </Link>
               </Button>
-              <Button asChild variant="secondary">
-                <Link to="/auth">
-                  Get Started
-                </Link>
-              </Button>
             </div>
           </div>
         </div>
