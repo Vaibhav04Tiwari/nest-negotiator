@@ -13,6 +13,7 @@ import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { Loader2, Home, X } from 'lucide-react';
 import { VoiceAssistant } from '@/components/VoiceAssistant';
+import { AutoVoiceGreeting } from '@/components/AutoVoiceGreeting';
 
 const TRADES = [
   'Mason', 'Carpenter', 'Electrician', 'Plumber', 'Painter', 
@@ -293,8 +294,8 @@ const LabourRegistration = () => {
         </div>
       </div>
       
-      {/* Voice Assistant for labour registration help */}
-      <VoiceAssistant context="labour" />
+      {/* Auto-greeting Voice Assistant for labour registration help */}
+      <AutoVoiceGreeting context="labour" />
     </div>
   );
 };

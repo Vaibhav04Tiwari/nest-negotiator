@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { useRef } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { VoiceAssistant } from "@/components/VoiceAssistant";
+import { AutoVoiceGreeting } from "@/components/AutoVoiceGreeting";
 
 const Index = () => {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -105,8 +106,9 @@ const Index = () => {
         </div>
       </section>
       
-      {/* Voice Assistant for Labour Accessibility */}
-      <VoiceAssistant context="navigation" />
+      
+      {/* Auto-greeting Voice Assistant that welcomes users */}
+      <AutoVoiceGreeting context="navigation" />
     </div>
   );
 };

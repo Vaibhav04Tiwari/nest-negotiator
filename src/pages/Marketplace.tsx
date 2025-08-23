@@ -17,6 +17,7 @@ import {
 import { MessageSquare, Star, MapPin, Phone, Calendar, Send, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { VoiceAssistant } from "@/components/VoiceAssistant";
+import { AutoVoiceGreeting } from "@/components/AutoVoiceGreeting";
 
 interface Labour {
   id: string;
@@ -244,8 +245,8 @@ const Marketplace = () => {
         </Button>
       </div>
       
-      {/* Voice Assistant for easy navigation */}
-      <VoiceAssistant context="general" />
+      {/* Auto-greeting Voice Assistant for easy navigation */}
+      <AutoVoiceGreeting context="general" />
     </div>
   );
 };

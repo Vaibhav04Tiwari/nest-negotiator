@@ -40,9 +40,16 @@ const VoiceHelp = () => {
       <div className="mb-8 text-center">
         <h1 className="text-3xl font-bold mb-4">Voice Assistant Help</h1>
         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-          Use your voice to explore BuildMate! Perfect for those who prefer speaking over typing.
-          The voice assistant works in multiple languages including Hindi, English, Spanish, French, and Arabic.
+          Use your voice to explore BuildMate! The assistant automatically greets you when you enter the website and guides you throughout. 
+          Perfect for those who prefer speaking over typing. Works in multiple languages including Hindi, English, Spanish, French, and Arabic.
         </p>
+        <div className="mt-4 p-4 bg-blue-50 dark:bg-blue-950 rounded-lg max-w-2xl mx-auto">
+          <h3 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">✨ Auto-Greeting Feature</h3>
+          <p className="text-sm text-blue-700 dark:text-blue-300">
+            The voice assistant will automatically welcome you with "Hello! Welcome to BuildMate!" when you first visit any page. 
+            Just listen for the greeting and start talking back - no button clicking needed!
+          </p>
+        </div>
       </div>
 
       <div className="grid gap-6 md:grid-cols-1 lg:grid-cols-3 mb-8">
@@ -82,13 +89,21 @@ const VoiceHelp = () => {
         <CardContent className="space-y-4">
           <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <h3 className="font-medium mb-2">Getting Started:</h3>
+              <h3 className="font-medium mb-2">Getting Started (Auto-Mode):</h3>
               <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground">
-                <li>Look for the "Voice Help" button in the bottom-right corner of any page</li>
-                <li>Click it to start listening</li>
+                <li>Simply enter any page on BuildMate</li>
+                <li>Wait 2 seconds for the automatic greeting</li>
+                <li>Listen to the welcome message</li>
+                <li>Start speaking your response or question</li>
+                <li>The assistant will guide you automatically</li>
+              </ol>
+              
+              <h3 className="font-medium mb-2 mt-4">Manual Mode:</h3>
+              <ol className="list-decimal list-inside space-y-2 text-sm text-muted-foreground">
+                <li>Look for the "Voice Help" button in the bottom-right corner</li>
+                <li>Click it to start listening manually</li>
                 <li>Speak clearly in your preferred language</li>
                 <li>Wait for the assistant to respond</li>
-                <li>Follow the voice instructions or navigation</li>
               </ol>
             </div>
             <div>
