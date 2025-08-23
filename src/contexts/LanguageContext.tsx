@@ -47,6 +47,14 @@ const translations = {
     'auth.fullName': 'Full Name',
     'auth.alreadyAccount': 'Already have an account?',
     'auth.needAccount': 'Need an account?',
+
+    // Voice Assistant
+    'voice.listening': 'Listening...',
+    'voice.speakNow': 'Speak now',
+    'voice.stopListening': 'Stop Listening',
+    'voice.processing': 'Processing...',
+    'voice.speaking': 'Speaking...',
+    'voice.startListening': 'Voice Help',
   },
   es: {
     // Header
@@ -86,6 +94,14 @@ const translations = {
     'auth.fullName': 'Nombre Completo',
     'auth.alreadyAccount': '¿Ya tienes una cuenta?',
     'auth.needAccount': '¿Necesitas una cuenta?',
+
+    // Voice Assistant
+    'voice.listening': 'Escuchando...',
+    'voice.speakNow': 'Habla ahora',
+    'voice.stopListening': 'Parar de Escuchar',
+    'voice.processing': 'Procesando...',
+    'voice.speaking': 'Hablando...',
+    'voice.startListening': 'Ayuda por Voz',
   },
   hi: {
     // Header
@@ -125,6 +141,14 @@ const translations = {
     'auth.fullName': 'पूरा नाम',
     'auth.alreadyAccount': 'पहले से खाता है?',
     'auth.needAccount': 'खाता चाहिए?',
+
+    // Voice Assistant
+    'voice.listening': 'सुन रहे हैं...',
+    'voice.speakNow': 'अब बोलें',
+    'voice.stopListening': 'सुनना बंद करें',
+    'voice.processing': 'प्रक्रिया में...',
+    'voice.speaking': 'बोल रहे हैं...',
+    'voice.startListening': 'आवाज़ से मदद',
   },
   ar: {
     // Header
@@ -164,6 +188,14 @@ const translations = {
     'auth.fullName': 'الاسم الكامل',
     'auth.alreadyAccount': 'هل لديك حساب؟',
     'auth.needAccount': 'تحتاج إلى حساب؟',
+
+    // Voice Assistant
+    'voice.listening': 'استمع...',
+    'voice.speakNow': 'تحدث الآن',
+    'voice.stopListening': 'توقف عن الاستماع',
+    'voice.processing': 'معالجة...',
+    'voice.speaking': 'يتحدث...',
+    'voice.startListening': 'مساعدة صوتية',
   },
   fr: {
     // Header
@@ -203,6 +235,14 @@ const translations = {
     'auth.fullName': 'Nom Complet',
     'auth.alreadyAccount': 'Vous avez déjà un compte ?',
     'auth.needAccount': 'Besoin d\'un compte ?',
+
+    // Voice Assistant
+    'voice.listening': 'Écoute...',
+    'voice.speakNow': 'Parlez maintenant',
+    'voice.stopListening': 'Arrêter d\'Écouter',
+    'voice.processing': 'Traitement...',
+    'voice.speaking': 'Parle...',
+    'voice.startListening': 'Aide Vocale',
   },
 };
 

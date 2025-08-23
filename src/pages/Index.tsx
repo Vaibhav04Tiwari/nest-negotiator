@@ -5,6 +5,7 @@ import { Calculator, Map, Users2, MessageSquareMore } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useRef } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { VoiceAssistant } from "@/components/VoiceAssistant";
 
 const Index = () => {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -103,6 +104,9 @@ const Index = () => {
           </div>
         </div>
       </section>
+      
+      {/* Voice Assistant for Labour Accessibility */}
+      <VoiceAssistant context="navigation" />
     </div>
   );
 };

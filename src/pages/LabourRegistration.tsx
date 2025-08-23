@@ -12,6 +12,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { Loader2, Home, X } from 'lucide-react';
+import { VoiceAssistant } from '@/components/VoiceAssistant';
 
 const TRADES = [
   'Mason', 'Carpenter', 'Electrician', 'Plumber', 'Painter', 
@@ -291,6 +292,9 @@ const LabourRegistration = () => {
           </Card>
         </div>
       </div>
+      
+      {/* Voice Assistant for labour registration help */}
+      <VoiceAssistant context="labour" />
     </div>
   );
 };

@@ -12,6 +12,7 @@ import MapPlanning from "./pages/MapPlanning";
 import MapEditor from "./pages/MapEditor";
 import Marketplace from "./pages/Marketplace";
 import Auth from "./pages/Auth";
+import VoiceHelp from "./pages/VoiceHelp";
 import LabourRegistration from "./pages/LabourRegistration";
 import { HelmetProvider } from "react-helmet-async";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -36,6 +37,7 @@ const App = () => (
                 <Route path="/map-planning" element={<MapPlanning />} />
                 <Route path="/map-editor" element={<MapEditor />} />
                 <Route path="/marketplace" element={<Marketplace />} />
+                <Route path="/voice-help" element={<VoiceHelp />} />
               </Route>
               <Route path="/auth" element={<Auth />} />
               <Route path="/labour-registration" element={<LabourRegistration />} />

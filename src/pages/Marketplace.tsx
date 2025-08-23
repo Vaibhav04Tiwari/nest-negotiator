@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/drawer";
 import { MessageSquare, Star, MapPin, Phone, Calendar, Send, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import { VoiceAssistant } from "@/components/VoiceAssistant";
 
 interface Labour {
   id: string;
@@ -242,6 +243,9 @@ const Marketplace = () => {
           <a href="/labour-registration">Register as Labour Professional</a>
         </Button>
       </div>
+      
+      {/* Voice Assistant for easy navigation */}
+      <VoiceAssistant context="general" />
     </div>
   );
 };
